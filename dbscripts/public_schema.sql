@@ -54,7 +54,16 @@ CREATE TABLE bills(
     REFERENCES   apartments(id),
   CONSTRAINT     fk_bill_service_id FOREIGN KEY (service_id)
     REFERENCES   services(id)
-)
+);
+
+CREATE TABLE payments(
+  id          uuid PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  bill_id     uuid UNIQUE NOT NULL,
+  user_id     uuid NOT NULL,
+  created_at  timestamp NOT NULL DEFAULT NOW(),
+  CONSTRAINT  payment_bill_id FOREIGN KEY (bill_id) REFERENCES bills(id),
+  CONSTRAINT  payment_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
 CREATE TABLE apartment_services(
   apartment_id uuid NOT NULL,
